@@ -1,45 +1,45 @@
 <!DOCTYPE html>
-
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>{% block title %}{% endblock %}Djangochat</title>
-
-        <script src="https://cdn.tailwindcss.com"></script>
-
-        <style>
-            .messages {
-                height: 400px;
-                overflow-y: auto;
-            }
-        </style>
-    </head>
-
-    <body class="bg-teal-600">
-        <nav class="flex items-center justify-between px-4 py-6 bg-teal-800">
-            <div>
-                <a href="/" class="text-xl text-white">Djangochat</a>
-            </div>
-
-            <div class="flex items-center space-x-4">
-                {% if request.user.is_authenticated %}
-                    <a href="/rooms/" class="text-white hover:text-gray-200">Rooms</a>
-
-                    <a href="/logout/" class="px-5 py-3 rounded-xl text-white bg-teal-600 hover:bg-teal-700">Log out</a>
-                {% else %}
-                    <a href="/login/" class="text-white hover:text-gray-200">Log in</a>
-            
-                    <a href="/signup/" class="px-5 py-3 rounded-xl text-white bg-teal-600 hover:bg-teal-700">Sign up</a>
-                {% endif %}
-            </div>
-        </nav>
-
-        {% block content %}
-        {% endblock %}
-
-        {% block scripts %}
-        {% endblock %}
-    </body>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %}Djangochat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .messages {
+            height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="bg-blue-600">
+    <nav class="flex items-center justify-between px-4 py-6 bg-teal-800">
+        <div>
+            <a href="/" class="text-xl text-white">Django Chat Web App</a>
+        </div>
+        <div class="flex items-center space-x-4">
+            {% if request.user.is_authenticated %}
+            <a href="/rooms/" class="text-white hover:text-gray-200">Rooms</a>
+            <!-- Modified logout link to act on click -->
+            <a href="#" id="logoutLink" class="px-5 py-3 rounded-xl text-white bg-teal-600 hover:bg-teal-700" role="button">Log out</a>
+            {% else %}
+            <a href="/login/" class="text-white hover:text-gray-200">Log in</a>
+            <a href="/signup/" class="px-5 py-3 rounded-xl text-white bg-teal-600 hover:bg-teal-700">Sign up</a>
+            {% endif %}
+        </div>
+    </nav>
+    <!-- Hidden logout form -->
+    <form id="logoutForm" action="{% url 'logout' %}" method="post" style="display: none;">
+        {% csrf_token %}
+    </form>
+    {% block content %}{% endblock %}
+    {% block scripts %}{% endblock %}
+    <!-- JavaScript to submit the hidden form -->
+    <script>
+        document.getElementById('logoutLink').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default link action
+            document.getElementById('logoutForm').submit(); // Submit the hidden logout form
+        });
+    </script>
+</body>
 </html>
